@@ -20,6 +20,7 @@ export default class Home extends Component {
       const reader = new FileReader();
       reader.onload = (e) => {
         const newFile = {
+          blob: file,
           file: e.target.result,
           name: file.name
         }
@@ -39,7 +40,6 @@ export default class Home extends Component {
   };
 
   generateAndroid = () => {
-
   };
 
   generateIOS = () => {
