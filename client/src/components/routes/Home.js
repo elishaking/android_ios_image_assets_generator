@@ -1,6 +1,7 @@
 //@ts-check
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
+import axios from 'axios';
 import './Home.scss';
 
 import NavBar from '../NavBar';
@@ -40,6 +41,7 @@ export default class Home extends Component {
   };
 
   generateAndroid = () => {
+    axios.post("/android", [this.state.files[0].file]);
   };
 
   generateIOS = () => {

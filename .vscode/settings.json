@@ -1,6 +1,7 @@
 {
-  "jshint.options": {
-    "esversion": 6
-  },
+  // "jshint.options": {
+  //   "esversion": 6
+  // },
+  "jshint.enable": false,
   "editor.formatOnSave": true
 }
