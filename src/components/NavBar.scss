@@ -28,6 +28,10 @@
     a:hover {
       color: #FE9D2B
     }
+
+    .svg {
+      display: none;
+    }
   }
 
   @media (max-width: 600px) {
@@ -38,8 +42,16 @@
       width: 100%;
       margin-left: -5vw;
       justify-content: space-around;
-      background: white;
+      background: #f3f3f3;
       box-shadow: 0 0 13px 2px #d0d0d0;
+
+      .svg {
+        display: unset;
+      }
+
+      span {
+        display: none;
+      }
     }
   }
 }
