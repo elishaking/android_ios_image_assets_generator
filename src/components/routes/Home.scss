@@ -47,12 +47,36 @@
 
     img {
       max-width: 200px;
-      margin: 2em 1em 1em 1em;
+      margin: 2em 2em 1em 2em;
     }
 
     p {
       text-align: center;
       margin-bottom: 2em;
     }
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    padding: 0.7em 1.3em;
+    cursor: pointer;
+    margin-top: 2em;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    color: white;
+
+    span {
+      margin-left: 1em;
+    }
+  }
+
+  .android {
+    background: #A4C639;
+  }
+
+  .ios {
+    background: #B2B2B2;
   }
 }
