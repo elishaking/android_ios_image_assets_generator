@@ -1,3 +1,26 @@
-h1 {
-  font-weight: 500;
+#home {
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .select {
+    height: 50vh;
+    width: 80vw;
+    max-height: 300px;
+    max-width: 300px;
+    background: #F3F3F3;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    small {
+      color: #707070;
+    }
+  }
 }
