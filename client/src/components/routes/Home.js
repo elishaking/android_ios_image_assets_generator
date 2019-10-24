@@ -41,7 +41,32 @@ export default class Home extends Component {
   };
 
   generateAndroid = () => {
-    axios.post("/android", [this.state.files[0].file]);
+    // axios.post("/android", [this.state.files[0].file])
+    //   .then((res) => {
+    //     window.open(res.data);
+    //     // const a = document.createElement('a');
+    //     // a.href = res.data;
+    //     // a.download = `${Date.now()}.png`;
+    //     // a.style.display = "none";
+    //     // document.body.appendChild(a);
+    //     // a.click();
+    //     // document.body.removeChild(a);
+    //   });
+    fetch("/android", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([this.state.files[0].file])
+    }).then((res) => res.blob().then((blob) => {
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${Date.now()}.png`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    }));
   };
 
   generateIOS = () => {
