@@ -109,8 +109,8 @@ export default class Home extends Component {
               images.length > 0 && (
                 <div className="img-display">
                   {
-                    images.map((image) => (
-                      <div>
+                    images.map((image, index) => (
+                      <div key={index}>
                         <img src={image.dataUrl} alt="" />
                         <p>{image.name} </p>
                       </div>
