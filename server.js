@@ -35,23 +35,23 @@ server.post("/android", async (req, res) => {
         .toFile(`./images/${dirName}/` + image.name + ".png");
     }
   }
-  res.send("good");
 
-  // const zipOutput = fs.createWriteStream('./zipped/zipOutput.zip');
-  // zipOutput.on('close', () => {
-  //   console.log(`${archive.pointer()} total bytes`);
-  // });
+  fs.mkdirSync(path.join(__dirname, "zipped", dirName));
+  const assets = fs.createWriteStream(`./zipped/${dirName}/assets.zip`);
+  assets.on('close', () => {
+    console.log(`${archive.pointer()} total bytes`);
+  });
 
-  // archive.on('error', (err) => {
-  //   console.error(err);
-  // })
+  archive.on('error', (err) => {
+    console.error(err);
+  })
 
-  // archive.directory('./images', false)
-  //   .on('error', (err) => console.error(err))
-  //   .pipe(zipOutput);
+  archive.directory(`./images/${dirName}`, false)
+    .on('error', (err) => console.error(err))
+    .pipe(assets);
 
-  // zipOutput.on('close', () => res.send("complete"));
-  // archive.finalize();
+  assets.on('close', () => res.send("complete"));
+  archive.finalize();
 
   // res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
   //   if (err) return console.error(err);
