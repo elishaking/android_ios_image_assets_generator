@@ -16,7 +16,7 @@ server.use((req, res, next) => {
   next();
 });
 
-server.post("/android", async (req, res) => {
+server.post("/android/:uniqueLink", async (req, res) => {
   const images = req.body;
   const dirName = `${Date.now()}`;
   fs.mkdirSync(path.join(__dirname, "images", dirName));

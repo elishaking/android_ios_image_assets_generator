@@ -56,7 +56,8 @@ export default class Home extends Component {
     //     a.click();
     //     document.body.removeChild(a);
     //   });
-    fetch("/android", {
+    const uniqueLink = Date.now().toString().substring(7, 13);
+    fetch(`/android/${uniqueLink}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -70,7 +71,7 @@ export default class Home extends Component {
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `assets_${Date.now().toString().substring(7, 13)}.zip`);
+      link.setAttribute('download', `assets_${uniqueLink}.zip`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
