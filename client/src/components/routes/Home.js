@@ -117,7 +117,21 @@ export default class Home extends Component {
                   {
                     images.map((image, index) => (
                       <div key={index}>
-                        <img src={image.dataUrl} alt="" />
+                        <div className="img">
+                          <img src={image.dataUrl} alt="" />
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                            <g id="Group_18" data-name="Group 18" transform="translate(-1239 -428)">
+                              <g id="Rectangle_9" data-name="Rectangle 9" transform="translate(1239 428)" fill="#8f8f8f" stroke="#acacac" stroke-width="2">
+                                <rect width="20" height="20" rx="6" stroke="none" />
+                                <rect x="1" y="1" width="18" height="18" rx="5" fill="none" />
+                              </g>
+                              <g id="Group_17" data-name="Group 17" transform="translate(1.192 22.192)">
+                                <line id="Line_1" data-name="Line 1" x2="8.617" y2="8.617" transform="translate(1243.5 411.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2" />
+                                <line id="Line_2" data-name="Line 2" x1="8.617" y2="8.617" transform="translate(1243.5 411.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2" />
+                              </g>
+                            </g>
+                          </svg>
+                        </div>
                         <p>{image.name} </p>
                       </div>
                     ))
