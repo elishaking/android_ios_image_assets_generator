@@ -90,7 +90,7 @@ const resizeImages = async (images, dirName) => {
       for (let i = 0; i < sizes.length; i++) {
         await sharp(img)
           .resize(Math.round(width * ANDROID_SIZES[sizes[i]]), Math.round(height * ANDROID_SIZES[sizes[i]]))
-          .toFile(`./images/${dirName}/${image.name}_${sizes[i]}.png`);
+          .toFile(`./images/${dirName}/${image.name}_${sizes[i]}.${mimType.replace("image/", "")}`);
       }
     }
   }
