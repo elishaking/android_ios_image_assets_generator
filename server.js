@@ -1,3 +1,4 @@
+//@ts-check
 const express = require('express');
 const sharp = require('sharp');
 const path = require('path');
@@ -20,20 +21,7 @@ server.post("/android", async (req, res) => {
   const dirName = `${Date.now()}`;
   fs.mkdirSync(path.join(__dirname, "images", dirName));
 
-  for (let i = 0; i < images.length; i++) {
-    const parts = images[i].dataUrl.split(';');
-    const mimType = parts[0].split(':')[1];
-    const imageData = parts[1].split(',')[1];
-
-    const img = new Buffer(imageData, 'base64');
-    const image = { name: images[i].name };
-
-    if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
-      await sharp(img)
-        .resize(64, 64)
-        .toFile(`./images/${dirName}/${image.name}_64.png`);
-    }
-  }
+  await resizeImages(images, dirName);
 
   const archive = archiver('zip');
 
@@ -70,3 +58,20 @@ server.get("/download/:name", (req, res) => {
 });
 
 server.listen(8000);
+
+const resizeImages = async (images, dirName) => {
+  for (let i = 0; i < images.length; i++) {
+    const parts = images[i].dataUrl.split(';');
+    const mimType = parts[0].split(':')[1];
+    const imageData = parts[1].split(',')[1];
+
+    const img = new Buffer(imageData, 'base64');
+    const image = { name: images[i].name };
+
+    if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
+      await sharp(img)
+        .resize(64, 64)
+        .toFile(`./images/${dirName}/${image.name}_64.png`);
+    }
+  }
+};
