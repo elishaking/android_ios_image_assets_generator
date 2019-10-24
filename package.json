@@ -1,0 +1,33 @@
+{
+  "name": "android_ios_image_resize",
+  "version": "0.0.3",
+  "description": "Generate Android and IOS image assets (using the recommended sizes) for your apps",
+  "main": "server.js",
+  "dependencies": {
+    "archiver": "^3.1.1",
+    "express": "^4.17.1",
+    "sharp": "^0.23.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elishaking/android_ios_image_assets_generator.git"
+  },
+  "keywords": [
+    "Images",
+    "Assets",
+    "Resize",
+    "Android",
+    "iOS"
+  ],
+  "author": "King Elisha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elishaking/android_ios_image_assets_generator/issues"
+  },
+  "homepage": "https://github.com/elishaking/android_ios_image_assets_generator#readme"
+}
