@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 
-const archive = archiver('zip');
 const ACCEPTED_MIME_TYPES = ['image/png', 'image/jpeg'];
 
 const server = express();
@@ -36,6 +35,8 @@ server.post("/android", async (req, res) => {
     }
   }
 
+  const archive = archiver('zip');
+
   fs.mkdirSync(path.join(__dirname, "zipped", dirName));
   const assets = fs.createWriteStream(`./zipped/${dirName}/assets.zip`);
   assets.on('close', () => {
@@ -44,20 +45,20 @@ server.post("/android", async (req, res) => {
 
   archive.on('error', (err) => {
     console.error(err);
-  })
+  });
 
   archive.directory(`./images/${dirName}`, false)
     .on('error', (err) => console.error(err))
     .pipe(assets);
 
-  assets.on('close', () => res.send("complete"));
+  assets.on('close', () => {
+    res.download(path.join(__dirname, "zipped", dirName, "assets.zip"), (err) => {
+      if (err) return console.error(err);
+
+      console.log("downloaded");
+    });
+  });
   archive.finalize();
-
-  // res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
-  //   if (err) return console.error(err);
-
-  //   console.log("downloaded");
-  // });
 });
 
 server.post("/ios", (req, res) => {

@@ -58,16 +58,15 @@ export default class Home extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.state.images.map((image) => image.dataUrl))
-    });
-    // .then((res) => res.blob().then((blob) => {
-    //   const url = window.URL.createObjectURL(new Blob([blob]));
-    //   const link = document.createElement('a');
-    //   link.href = url;
-    //   link.setAttribute('download', `${Date.now()}.png`);
-    //   document.body.appendChild(link);
-    //   link.click();
-    //   link.parentNode.removeChild(link);
-    // }));
+    }).then((res) => res.blob().then((blob) => {
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `assets.zip`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    }));
   };
 
   generateIOS = () => {
