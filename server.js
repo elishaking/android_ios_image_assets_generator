@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 
-const ACCEPTED_MIME_TYPES = ['image/png', 'image/jpeg'];
+const { ACCEPTED_MIME_TYPES, ANDROID_SIZES } = require('./constants');
 
 const server = express();
 server.use(express.json({ limit: '50mb' }));
