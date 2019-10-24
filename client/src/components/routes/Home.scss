@@ -79,4 +79,10 @@
   .ios {
     background: #B2B2B2;
   }
+
+  @media (max-width: 600px) {
+    .ios {
+      margin-bottom: 5em;
+    }
+  }
 }
