@@ -51,7 +51,7 @@ export default class Home extends Component {
 
     this.setState({ loadingAndroid: true });
 
-    const uniqueLink = Date.now().toString().substring(7, 13);
+    const uniqueLink = Date.now().toString();
     fetch(`/android/${uniqueLink}`, {
       method: "POST",
       headers: {
@@ -64,11 +64,12 @@ export default class Home extends Component {
       })))
     }).then((res) => res.blob().then((blob) => {
       this.setState({ loadingAndroid: false });
+      if (blob.size == 0) return;
 
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `assets_${uniqueLink}.zip`);
+      link.setAttribute('download', `assets_${uniqueLink.substring(7, 13)}.zip`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
