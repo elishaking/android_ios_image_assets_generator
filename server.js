@@ -32,28 +32,7 @@ server.post("/android", (req, res) => {
       // res.setHeader("Content-Type", "image/png");
       // res.setHeader("Content-Disposition", `attachment; filename="${image.name}.png"`)
 
-      const zipOutput = fs.createWriteStream('./zipped/zipOutput.zip');
-      zipOutput.on('close', () => {
-        console.log(`${archive.pointer()} total bytes`);
-      });
 
-      archive.on('error', (err) => {
-        console.error(err);
-      })
-
-      archive.directory('./images', false)
-        .on('error', (err) => console.error(err))
-        .pipe(zipOutput);
-
-      zipOutput.on('close', () => res.send("complete"));
-      archive.finalize();
-
-      // res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
-      //   if (err) return console.error(err);
-
-      //   console.log("downloaded");
-      // });
-      // res.sendFile(path.join(__dirname, "images", image.name + ".png"));
     });
   // .toBuffer()
   // .then((resizedImageBuffer) => {
@@ -66,7 +45,27 @@ server.post("/android", (req, res) => {
   //   res.send(error);
   // });
   // }
-  // res.json({ success: true });
+  const zipOutput = fs.createWriteStream('./zipped/zipOutput.zip');
+  zipOutput.on('close', () => {
+    console.log(`${archive.pointer()} total bytes`);
+  });
+
+  archive.on('error', (err) => {
+    console.error(err);
+  })
+
+  archive.directory('./images', false)
+    .on('error', (err) => console.error(err))
+    .pipe(zipOutput);
+
+  zipOutput.on('close', () => res.send("complete"));
+  archive.finalize();
+
+  // res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
+  //   if (err) return console.error(err);
+
+  //   console.log("downloaded");
+  // });
 });
 
 server.post("/ios", (req, res) => {
