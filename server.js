@@ -33,31 +33,7 @@ server.post("/android/:uniqueLink", async (req, res) => {
   fs.mkdirSync(dirPath);
 
   await resizeImages(images, dirName);
-
-  const archive = archiver('zip');
-
-  fs.mkdirSync(path.join(__dirname, "zipped", dirName));
-  const assets = fs.createWriteStream(`./zipped/${dirName}/${assetsName}`);
-  assets.on('close', () => {
-    console.log(`${archive.pointer()} total bytes`);
-  });
-
-  archive.on('error', (err) => {
-    console.error(err);
-  });
-
-  archive.directory(`./images/${dirName}`, false)
-    .on('error', (err) => console.error(err))
-    .pipe(assets);
-
-  assets.on('close', () => {
-    res.download(path.join(__dirname, "zipped", dirName, assetsName), (err) => {
-      if (err) return console.error(err);
-
-      console.log("downloaded");
-    });
-  });
-  archive.finalize();
+  archiveImages(res, dirName, assetsName);
 });
 
 server.post("/ios", (req, res) => {
@@ -94,4 +70,31 @@ const resizeImages = async (images, dirName) => {
       }
     }
   }
+};
+
+const archiveImages = (res, dirName, assetsName) => {
+  const archive = archiver('zip');
+
+  fs.mkdirSync(path.join(__dirname, "zipped", dirName));
+  const assets = fs.createWriteStream(`./zipped/${dirName}/${assetsName}`);
+  assets.on('close', () => {
+    console.log(`${archive.pointer()} total bytes`);
+  });
+
+  archive.on('error', (err) => {
+    console.error(err);
+  });
+
+  archive.directory(`./images/${dirName}`, false)
+    .on('error', (err) => console.error(err))
+    .pipe(assets);
+
+  assets.on('close', () => {
+    res.download(path.join(__dirname, "zipped", dirName, assetsName), (err) => {
+      if (err) return console.error(err);
+
+      console.log("downloaded");
+    });
+  });
+  archive.finalize();
 };
