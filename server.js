@@ -1,6 +1,10 @@
 const express = require('express');
 const sharp = require('sharp');
 const path = require('path');
+const fs = require('fs');
+const archiver = require('archiver');
+
+const archive = archiver('zip');
 
 const server = express();
 server.use(express.json({ limit: '50mb' }));
@@ -27,11 +31,28 @@ server.post("/android", (req, res) => {
     .then((v) => {
       // res.setHeader("Content-Type", "image/png");
       // res.setHeader("Content-Disposition", `attachment; filename="${image.name}.png"`)
-      res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
-        if (err) return console.error(err);
 
-        console.log("downloaded");
+      const zipOutput = fs.createWriteStream('./zipped/zipOutput.zip');
+      zipOutput.on('close', () => {
+        console.log(`${archive.pointer()} total bytes`);
       });
+
+      archive.on('error', (err) => {
+        console.error(err);
+      })
+
+      archive.directory('./images', false)
+        .on('error', (err) => console.error(err))
+        .pipe(zipOutput);
+
+      zipOutput.on('close', () => res.send("complete"));
+      archive.finalize();
+
+      // res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
+      //   if (err) return console.error(err);
+
+      //   console.log("downloaded");
+      // });
       // res.sendFile(path.join(__dirname, "images", image.name + ".png"));
     });
   // .toBuffer()
