@@ -18,6 +18,8 @@ server.use((req, res, next) => {
 
 server.post("/android", async (req, res) => {
   const images = req.body;
+  const dirName = `${Date.now()}`;
+  fs.mkdirSync(path.join(__dirname, "images", dirName));
 
   for (let i = 0; i < images.length; i++) {
     const parts = images[i].split(';');
@@ -27,9 +29,11 @@ server.post("/android", async (req, res) => {
     const img = new Buffer(imageData, 'base64');
     const image = { name: Date.now().toString() };
 
-    // await sharp(img)
-    //   .resize(64, 64)
-    //   .toFile("./images/" + image.name + ".png");
+    if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
+      await sharp(img)
+        .resize(64, 64)
+        .toFile(`./images/${dirName}/` + image.name + ".png");
+    }
   }
   res.send("good");
 
