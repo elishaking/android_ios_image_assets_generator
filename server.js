@@ -47,7 +47,7 @@ server.get("/download/:name", (req, res) => {
 server.listen(8000);
 
 /** 
- * @param {string} images
+ * @param {[{dataUrl: string, name: string, size: any}]} images
  * @param {string} dirName */
 const resizeImages = async (images, dirName) => {
   for (let i = 0; i < images.length; i++) {
