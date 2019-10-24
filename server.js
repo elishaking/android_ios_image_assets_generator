@@ -36,7 +36,7 @@ server.post("/android/:uniqueLink", async (req, res) => {
   archiveImages(res, dirName, assetsName);
 });
 
-server.post("/ios", async (req, res) => {
+server.post("/ios/:uniqueLink", async (req, res) => {
   const images = req.body;
   const dirName = req.params.uniqueLink;
   const dirPath = path.join(__dirname, "images", dirName);
@@ -88,13 +88,13 @@ const resizeImages = async (images, dirName, android = true) => {
             .resize(Math.round(width * ANDROID_SIZES[android_sizes[i]]), Math.round(height * ANDROID_SIZES[android_sizes[i]]))
             .toFile(`./images/${dirName}/${image.name}_${android_sizes[i]}.${mimType.replace("image/", "")}`);
         }
-      }
-
-      const ios_sizes = Object.keys(IOS_SIZES);
-      for (let i = 0; i < ios_sizes.length; i++) {
-        await sharp(img)
-          .resize(Math.round(width * IOS_SIZES[ios_sizes[i]]), Math.round(height * IOS_SIZES[ios_sizes[i]]))
-          .toFile(`./images/${dirName}/${image.name}${ios_sizes[i]}.${mimType.replace("image/", "")}`);
+      } else {
+        const ios_sizes = Object.keys(IOS_SIZES);
+        for (let i = 0; i < ios_sizes.length; i++) {
+          await sharp(img)
+            .resize(Math.round(width * IOS_SIZES[ios_sizes[i]]), Math.round(height * IOS_SIZES[ios_sizes[i]]))
+            .toFile(`./images/${dirName}/${image.name}${ios_sizes[i]}.${mimType.replace("image/", "")}`);
+        }
       }
     }
   }

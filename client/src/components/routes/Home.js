@@ -46,13 +46,14 @@ export default class Home extends Component {
     this.setState({ dropText: "Select/Drop Image(s)" });
   };
 
-  generateAndroid = () => {
+  generateAssets = (os = "android") => {
     if (this.state.images.length == 0) return;
 
-    this.setState({ loadingAndroid: true });
+    const loadingKey = os === "android" ? "loadingAndroid" : "loadingIOS";
+    this.setState({ [loadingKey]: true });
 
     const uniqueLink = Date.now().toString();
-    fetch(`/android/${uniqueLink}`, {
+    fetch(`/${os}/${uniqueLink}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -63,7 +64,7 @@ export default class Home extends Component {
         dataUrl: image.dataUrl
       })))
     }).then((res) => res.blob().then((blob) => {
-      this.setState({ loadingAndroid: false });
+      this.setState({ [loadingKey]: false });
       if (blob.size == 0) return;
 
       const url = window.URL.createObjectURL(new Blob([blob]));
@@ -74,11 +75,15 @@ export default class Home extends Component {
       link.click();
       link.parentNode.removeChild(link);
     }));
+  };
+
+  generateAndroid = () => {
+    this.generateAssets();
     // console.log(JSON.stringify(this.state.images.map((image) => ({ name: image.name, size: image.size, dataUrl: image.dataUrl }))));
   };
 
   generateIOS = () => {
-
+    this.generateAssets("ios");
   };
 
   render() {
