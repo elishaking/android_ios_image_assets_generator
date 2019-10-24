@@ -16,4 +16,10 @@ const ANDROID_SIZES = {
   xxxhdpi: 4.0 / BASE,
 };
 
-module.exports = { ACCEPTED_MIME_TYPES, ANDROID_SIZES };
+const IOS_SIZES = {
+  "@1x": 1.0,
+  "@2x": 2.0,
+  "@3x": 3.0
+};
+
+module.exports = { ACCEPTED_MIME_TYPES, ANDROID_SIZES, IOS_SIZES };
