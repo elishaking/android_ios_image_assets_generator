@@ -66,12 +66,21 @@ const resizeImages = async (images, dirName) => {
     const imageData = parts[1].split(',')[1];
 
     const img = new Buffer(imageData, 'base64');
-    const image = { name: images[i].name };
+    const image = {
+      name: images[i].name,
+      size: images[i].size
+    };
+
+    const width = parseInt(image.size.width);
+    const height = parseInt(image.size.height);
 
     if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
-      await sharp(img)
-        .resize(64, 64)
-        .toFile(`./images/${dirName}/${image.name}_64.png`);
+      const sizes = Object.keys(ANDROID_SIZES);
+      for (let i = 0; i < sizes.length; i++) {
+        await sharp(img)
+          .resize(Math.round(width * ANDROID_SIZES[sizes[i]]), Math.round(height * ANDROID_SIZES[sizes[i]]))
+          .toFile(`./images/${dirName}/${image.name}_${sizes[i]}.png`);
+      }
     }
   }
 };

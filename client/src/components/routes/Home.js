@@ -22,8 +22,7 @@ export default class Home extends Component {
 
       reader.onload = (e) => {
         const img = new Image();
-        // @ts-ignore
-        img.src = e.target.result;
+        img.src = e.target.result.toString();
 
         const newImage = {
           file: imageFile,
@@ -62,16 +61,21 @@ export default class Home extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state.images.map((image) => ({ name: image.name, dataUrl: image.dataUrl, size: image.size })))
+      body: JSON.stringify(this.state.images.map((image) => ({
+        name: image.name,
+        size: { width: image.size[0].toString(), height: image.size[1].toString() },
+        dataUrl: image.dataUrl
+      })))
     }).then((res) => res.blob().then((blob) => {
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `assets.zip`);
+      link.setAttribute('download', `assets_${Date.now().toString().substring(7, 13)}.zip`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
     }));
+    // console.log(JSON.stringify(this.state.images.map((image) => ({ name: image.name, size: image.size, dataUrl: image.dataUrl }))));
   };
 
   generateIOS = () => {
