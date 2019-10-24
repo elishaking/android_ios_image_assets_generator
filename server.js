@@ -18,15 +18,26 @@ server.use((req, res, next) => {
 
 server.post("/android/:uniqueLink", async (req, res) => {
   const images = req.body;
-  const dirName = `${Date.now()}`;
-  fs.mkdirSync(path.join(__dirname, "images", dirName));
+  const dirName = req.params.uniqueLink;
+  const dirPath = path.join(__dirname, "images", dirName);
+  const assetsName = `assets_${dirName.substring(7, 13)}.zip`;
+
+  if (fs.existsSync(dirPath)) {
+    return res.download(path.join(__dirname, "zipped", dirName, assetsName), (err) => {
+      if (err) return console.error(err);
+
+      console.log("downloaded");
+    });
+  }
+
+  fs.mkdirSync(dirPath);
 
   await resizeImages(images, dirName);
 
   const archive = archiver('zip');
 
   fs.mkdirSync(path.join(__dirname, "zipped", dirName));
-  const assets = fs.createWriteStream(`./zipped/${dirName}/assets_${req.params.uniqueLink}.zip`);
+  const assets = fs.createWriteStream(`./zipped/${dirName}/${assetsName}`);
   assets.on('close', () => {
     console.log(`${archive.pointer()} total bytes`);
   });
@@ -40,7 +51,7 @@ server.post("/android/:uniqueLink", async (req, res) => {
     .pipe(assets);
 
   assets.on('close', () => {
-    res.download(path.join(__dirname, "zipped", dirName, `assets_${req.params.uniqueLink}.zip`), (err) => {
+    res.download(path.join(__dirname, "zipped", dirName, assetsName), (err) => {
       if (err) return console.error(err);
 
       console.log("downloaded");
