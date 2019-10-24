@@ -5,6 +5,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 
 const archive = archiver('zip');
+const ACCEPTED_MIME_TYPES = ['image/png', 'image/jpeg'];
 
 const server = express();
 server.use(express.json({ limit: '50mb' }));
@@ -16,35 +17,37 @@ server.use((req, res, next) => {
 });
 
 server.post("/android", async (req, res) => {
-  const files = req.body;
+  const images = req.body;
 
-  for (let i = 0; i < files.length; i++) {
-    const parts = files[0].split(';');
+  for (let i = 0; i < images.length; i++) {
+    const parts = images[i].split(';');
     const mimType = parts[0].split(':')[1];
     const imageData = parts[1].split(',')[1];
 
     const img = new Buffer(imageData, 'base64');
     const image = { name: Date.now().toString() };
-    await sharp(img)
-      .resize(64, 64)
-      .toFile("./images/" + image.name + ".png");
+
+    // await sharp(img)
+    //   .resize(64, 64)
+    //   .toFile("./images/" + image.name + ".png");
   }
+  res.send("good");
 
-  const zipOutput = fs.createWriteStream('./zipped/zipOutput.zip');
-  zipOutput.on('close', () => {
-    console.log(`${archive.pointer()} total bytes`);
-  });
+  // const zipOutput = fs.createWriteStream('./zipped/zipOutput.zip');
+  // zipOutput.on('close', () => {
+  //   console.log(`${archive.pointer()} total bytes`);
+  // });
 
-  archive.on('error', (err) => {
-    console.error(err);
-  })
+  // archive.on('error', (err) => {
+  //   console.error(err);
+  // })
 
-  archive.directory('./images', false)
-    .on('error', (err) => console.error(err))
-    .pipe(zipOutput);
+  // archive.directory('./images', false)
+  //   .on('error', (err) => console.error(err))
+  //   .pipe(zipOutput);
 
-  zipOutput.on('close', () => res.send("complete"));
-  archive.finalize();
+  // zipOutput.on('close', () => res.send("complete"));
+  // archive.finalize();
 
   // res.download(path.join(__dirname, "images", image.name + ".png"), (err) => {
   //   if (err) return console.error(err);

@@ -9,27 +9,28 @@ import NavBar from '../NavBar';
 export default class Home extends Component {
   state = {
     dropText: "Select/Drop Image(s)",
-    files: []
+    images: []
   };
 
   /**
-   * @param {File[]} files
+   * @param {File[]} imageFiles
    * @param {import('react-dropzone').DropEvent} event
    */
-  dropped = (files, event) => {
-    files.forEach((file) => {
+  dropped = (imageFiles, event) => {
+    imageFiles.forEach((imageFile) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const newFile = {
-          blob: file,
-          file: e.target.result,
-          name: file.name
-        }
-        this.setState({ files: [newFile, ...this.state.files] });
-      };
-      reader.readAsDataURL(file);
-    });
 
+      reader.onload = (e) => {
+        const newImage = {
+          file: imageFile,
+          dataUrl: e.target.result,
+          name: imageFile.name
+        }
+        this.setState({ images: [newImage, ...this.state.images] });
+      };
+
+      reader.readAsDataURL(imageFile);
+    });
   };
 
   dragEnter = () => {
@@ -41,7 +42,7 @@ export default class Home extends Component {
   };
 
   generateAndroid = () => {
-    // axios.post("/android", [this.state.files[0].file])
+    // axios.post("/android", [this.state.images[0].file])
     //   .then((res) => {
     //     const a = document.createElement('a');
     //     a.href = window.URL.createObjectURL(new Blob([res.data]));
@@ -56,7 +57,7 @@ export default class Home extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify([this.state.files[0].file])
+      body: JSON.stringify(this.state.images.map((image) => image.dataUrl))
     });
     // .then((res) => res.blob().then((blob) => {
     //   const url = window.URL.createObjectURL(new Blob([blob]));
@@ -74,7 +75,7 @@ export default class Home extends Component {
   };
 
   render() {
-    const { files } = this.state;
+    const { images } = this.state;
     return (
       <div id="home">
         <NavBar />
@@ -99,13 +100,13 @@ export default class Home extends Component {
               }
             </Dropzone>
             {
-              files.length > 0 && (
+              images.length > 0 && (
                 <div className="img-display">
                   {
-                    files.map((file) => (
+                    images.map((image) => (
                       <div>
-                        <img src={file.file} alt="" />
-                        <p>{file.name} </p>
+                        <img src={image.dataUrl} alt="" />
+                        <p>{image.name} </p>
                       </div>
                     ))
                   }
