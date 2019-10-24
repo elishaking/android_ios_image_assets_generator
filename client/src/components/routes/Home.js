@@ -28,7 +28,7 @@ export default class Home extends Component {
         const newImage = {
           file: imageFile,
           dataUrl: e.target.result,
-          name: imageFile.name.replace(`.${imageFile.type.split("/")[1]}`, "") || imageFile.name,
+          name: imageFile.name.replace(`.${imageFile.type.split("/")[1]}`, "").replace(".jpg", "") || imageFile.name,
           size: [img.width, img.height]
         }
         this.setState({ images: [newImage, ...this.state.images] });
