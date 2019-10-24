@@ -26,7 +26,7 @@ server.post("/android/:uniqueLink", async (req, res) => {
   const archive = archiver('zip');
 
   fs.mkdirSync(path.join(__dirname, "zipped", dirName));
-  const assets = fs.createWriteStream(`./zipped/${dirName}/assets.zip`);
+  const assets = fs.createWriteStream(`./zipped/${dirName}/assets_${req.params.uniqueLink}.zip`);
   assets.on('close', () => {
     console.log(`${archive.pointer()} total bytes`);
   });
@@ -40,7 +40,7 @@ server.post("/android/:uniqueLink", async (req, res) => {
     .pipe(assets);
 
   assets.on('close', () => {
-    res.download(path.join(__dirname, "zipped", dirName, "assets.zip"), (err) => {
+    res.download(path.join(__dirname, "zipped", dirName, `assets_${req.params.uniqueLink}.zip`), (err) => {
       if (err) return console.error(err);
 
       console.log("downloaded");
