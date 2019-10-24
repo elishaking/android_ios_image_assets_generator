@@ -76,7 +76,7 @@ const resizeImages = async (images, dirName) => {
 };
 
 /** 
- * @param {Express.Response} res
+ * @param {express.Response} res
  * @param {string} dirName
  * @param {string} assetsName */
 const archiveImages = (res, dirName, assetsName) => {
