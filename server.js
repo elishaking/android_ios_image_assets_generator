@@ -21,17 +21,17 @@ server.post("/android", async (req, res) => {
   fs.mkdirSync(path.join(__dirname, "images", dirName));
 
   for (let i = 0; i < images.length; i++) {
-    const parts = images[i].split(';');
+    const parts = images[i].dataUrl.split(';');
     const mimType = parts[0].split(':')[1];
     const imageData = parts[1].split(',')[1];
 
     const img = new Buffer(imageData, 'base64');
-    const image = { name: Date.now().toString() };
+    const image = { name: images[i].name };
 
     if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
       await sharp(img)
         .resize(64, 64)
-        .toFile(`./images/${dirName}/` + image.name + ".png");
+        .toFile(`./images/${dirName}/${image.name}_64.png`);
     }
   }
 

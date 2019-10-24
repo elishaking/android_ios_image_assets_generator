@@ -24,7 +24,7 @@ export default class Home extends Component {
         const newImage = {
           file: imageFile,
           dataUrl: e.target.result,
-          name: imageFile.name
+          name: imageFile.name.replace(`.${imageFile.type.split("/")[1]}`, "") || imageFile.name
         }
         this.setState({ images: [newImage, ...this.state.images] });
       };
@@ -57,7 +57,7 @@ export default class Home extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state.images.map((image) => image.dataUrl))
+      body: JSON.stringify(this.state.images.map((image) => ({ name: image.name, dataUrl: image.dataUrl })))
     }).then((res) => res.blob().then((blob) => {
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
