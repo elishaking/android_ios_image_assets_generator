@@ -86,6 +86,12 @@ export default class Home extends Component {
     this.generateAssets("ios");
   };
 
+  deleteImage = (index) => {
+    let { images } = this.state;
+    images.splice(index, 1);
+    this.setState({ images });
+  };
+
   render() {
     const { images, loadingAndroid, loadingIOS } = this.state;
     return (
@@ -119,7 +125,7 @@ export default class Home extends Component {
                       <div key={index}>
                         <div className="img">
                           <img src={image.dataUrl} alt="" />
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                          <svg onClick={(e) => this.deleteImage(index)} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
                             <g id="Group_18" data-name="Group 18" transform="translate(-1239 -428)">
                               <g id="Rectangle_9" data-name="Rectangle 9" transform="translate(1239 428)" fill="#8f8f8f" stroke="#acacac" stroke-width="2">
                                 <rect width="20" height="20" rx="6" stroke="none" />
