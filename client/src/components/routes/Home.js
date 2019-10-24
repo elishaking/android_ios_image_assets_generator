@@ -1,7 +1,6 @@
 //@ts-check
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import axios from 'axios';
 import './Home.scss';
 
 import NavBar from '../NavBar';
@@ -48,16 +47,6 @@ export default class Home extends Component {
   };
 
   generateAndroid = () => {
-    // axios.post("/android", [this.state.images[0].file])
-    //   .then((res) => {
-    //     const a = document.createElement('a');
-    //     a.href = window.URL.createObjectURL(new Blob([res.data]));
-    //     a.download = `${Date.now()}.png`;
-    //     a.style.display = "none";
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     document.body.removeChild(a);
-    //   });
     if (this.state.images.length == 0) return;
 
     this.setState({ loadingAndroid: true });
