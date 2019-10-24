@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 
-const { ACCEPTED_MIME_TYPES, ANDROID_SIZES } = require('./constants');
+const { ACCEPTED_MIME_TYPES, ANDROID_SIZES, IOS_SIZES } = require('./constants');
 
 const server = express();
 server.use(express.json({ limit: '50mb' }));
@@ -36,8 +36,24 @@ server.post("/android/:uniqueLink", async (req, res) => {
   archiveImages(res, dirName, assetsName);
 });
 
-server.post("/ios", (req, res) => {
-  res.json({ success: true });
+server.post("/ios", async (req, res) => {
+  const images = req.body;
+  const dirName = req.params.uniqueLink;
+  const dirPath = path.join(__dirname, "images", dirName);
+  const assetsName = `assets_${dirName.substring(7, 13)}.zip`;
+
+  if (fs.existsSync(dirPath)) {
+    return res.download(path.join(__dirname, "zipped", dirName, assetsName), (err) => {
+      if (err) return console.error(err);
+
+      console.log("downloaded");
+    });
+  }
+
+  fs.mkdirSync(dirPath);
+
+  await resizeImages(images, dirName, false);
+  archiveImages(res, dirName, assetsName);
 });
 
 server.get("/download/:name", (req, res) => {
@@ -49,7 +65,7 @@ server.listen(8000);
 /** 
  * @param {[{dataUrl: string, name: string, size: any}]} images
  * @param {string} dirName */
-const resizeImages = async (images, dirName) => {
+const resizeImages = async (images, dirName, android = true) => {
   for (let i = 0; i < images.length; i++) {
     const parts = images[i].dataUrl.split(';');
     const mimType = parts[0].split(':')[1];
@@ -65,11 +81,20 @@ const resizeImages = async (images, dirName) => {
     const height = parseInt(image.size.height);
 
     if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
-      const sizes = Object.keys(ANDROID_SIZES);
-      for (let i = 0; i < sizes.length; i++) {
+      if (android) {
+        const android_sizes = Object.keys(ANDROID_SIZES);
+        for (let i = 0; i < android_sizes.length; i++) {
+          await sharp(img)
+            .resize(Math.round(width * ANDROID_SIZES[android_sizes[i]]), Math.round(height * ANDROID_SIZES[android_sizes[i]]))
+            .toFile(`./images/${dirName}/${image.name}_${android_sizes[i]}.${mimType.replace("image/", "")}`);
+        }
+      }
+
+      const ios_sizes = Object.keys(IOS_SIZES);
+      for (let i = 0; i < ios_sizes.length; i++) {
         await sharp(img)
-          .resize(Math.round(width * ANDROID_SIZES[sizes[i]]), Math.round(height * ANDROID_SIZES[sizes[i]]))
-          .toFile(`./images/${dirName}/${image.name}_${sizes[i]}.${mimType.replace("image/", "")}`);
+          .resize(Math.round(width * IOS_SIZES[ios_sizes[i]]), Math.round(height * IOS_SIZES[ios_sizes[i]]))
+          .toFile(`./images/${dirName}/${image.name}${ios_sizes[i]}.${mimType.replace("image/", "")}`);
       }
     }
   }
