@@ -92,6 +92,10 @@ export default class Home extends Component {
     this.setState({ images });
   };
 
+  deleteAll = () => {
+    this.setState({ images: [] });
+  };
+
   render() {
     const { images, loadingAndroid, loadingIOS } = this.state;
     return (
@@ -120,12 +124,24 @@ export default class Home extends Component {
             {
               images.length > 0 && (
                 <div className="img-display">
+                  <svg id="all" onClick={this.deleteAll} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                    <g id="Group_18" data-name="Group 18" transform="translate(-1239 -428)">
+                      <g id="Rectangle_9" data-name="Rectangle 9" transform="translate(1239 428)" fill="#8f8f8f" stroke="#acacac" strokeWidth="2">
+                        <rect width="20" height="20" rx="6" stroke="none" />
+                        <rect x="1" y="1" width="18" height="18" rx="5" fill="none" />
+                      </g>
+                      <g id="Group_17" data-name="Group 17" transform="translate(1.192 22.192)">
+                        <line id="Line_1" data-name="Line 1" x2="8.617" y2="8.617" transform="translate(1243.5 411.5)" fill="none" stroke="#fff" strokeLinecap="round" strokeWidth="2" />
+                        <line id="Line_2" data-name="Line 2" x1="8.617" y2="8.617" transform="translate(1243.5 411.5)" fill="none" stroke="#fff" strokeLinecap="round" strokeWidth="2" />
+                      </g>
+                    </g>
+                  </svg>
                   {
                     images.map((image, index) => (
                       <div key={index}>
                         <div className="img">
                           <img src={image.dataUrl} alt="" />
-                          <svg onClick={(e) => this.deleteImage(index)} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                          <svg id="single" onClick={(e) => this.deleteImage(index)} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
                             <g id="Group_18" data-name="Group 18" transform="translate(-1239 -428)">
                               <g id="Rectangle_9" data-name="Rectangle 9" transform="translate(1239 428)" fill="#8f8f8f" stroke="#acacac" strokeWidth="2">
                                 <rect width="20" height="20" rx="6" stroke="none" />
