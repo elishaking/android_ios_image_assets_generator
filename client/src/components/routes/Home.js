@@ -65,7 +65,7 @@ export default class Home extends Component {
       })))
     }).then((res) => res.blob().then((blob) => {
       this.setState({ [loadingKey]: false });
-      if (blob.size == 0) return;
+      if (blob.size === 0 || blob.type === "") return;
 
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
