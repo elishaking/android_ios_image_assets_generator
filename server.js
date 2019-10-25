@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 
-const { ACCEPTED_MIME_TYPES, ANDROID_SIZES, IOS_SIZES } = require('./constants');
+const { ACCEPTED_MIME_TYPES, ANDROID_SIZES, IOS_SIZES, FILE_STORAGE_DURATION } = require('./constants');
 
 const server = express();
 server.use(express.json({ limit: '50mb' }));
@@ -126,7 +126,27 @@ const archiveImages = (res, dirName, assetsName) => {
       if (err) return console.error(err);
 
       console.log("downloaded");
+
+      setTimeout(() => {
+        deleteFolderRecursive(path.join(__dirname, "zipped", dirName));
+        deleteFolderRecursive(path.join(__dirname, "images", dirName));
+      }, FILE_STORAGE_DURATION);
     });
   });
   archive.finalize();
+};
+
+/** @param {string} dirPath */
+const deleteFolderRecursive = function (dirPath) {
+  if (fs.existsSync(dirPath)) {
+    fs.readdirSync(dirPath).forEach((file, index) => {
+      const curPath = path.join(dirPath, file);
+      if (fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(dirPath);
+  }
 };

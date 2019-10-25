@@ -23,4 +23,6 @@ const IOS_SIZES = {
   "@3x": 3.0 / IOS_BASE
 };
 
-module.exports = { ACCEPTED_MIME_TYPES, ANDROID_SIZES, IOS_SIZES };
+const FILE_STORAGE_DURATION = 1 * 60 * 1000; // generated files will be deleted from the server after 1 minute(s)
+
+module.exports = { ACCEPTED_MIME_TYPES, ANDROID_SIZES, IOS_SIZES, FILE_STORAGE_DURATION };
