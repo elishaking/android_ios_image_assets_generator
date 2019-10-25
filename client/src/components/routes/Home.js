@@ -150,7 +150,7 @@ export default class Home extends Component {
                   </svg>
                   {
                     images.map((image, index) => (
-                      <div key={index}>
+                      <div key={index} className="img-container">
                         <div className="img">
                           <img src={image.dataUrl} alt="" />
                           <svg id="single" onClick={(e) => this.deleteImage(index)} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
