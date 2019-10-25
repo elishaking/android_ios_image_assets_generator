@@ -20,3 +20,8 @@ Generate Android and IOS image assets (using the recommended sizes) for your app
 @2x
 @3x
 ```
+
+## Important Setup
+
+- Create a folder named **_zipped_** in the **project root**
+- Create a folder named **_images_** in the **project root**
