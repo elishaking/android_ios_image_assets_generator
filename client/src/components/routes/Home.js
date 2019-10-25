@@ -30,15 +30,16 @@ export default class Home extends Component {
 
       reader.onload = (e) => {
         const img = new Image();
+        img.onload = () => {
+          const newImage = {
+            file: imageFile,
+            dataUrl: e.target.result,
+            name: imageFile.name.replace(`.${imageFile.type.split("/")[1]}`, "").replace(".jpg", "") || imageFile.name,
+            size: [img.width, img.height]
+          }
+          this.setState({ images: [newImage, ...this.state.images] });
+        };
         img.src = e.target.result.toString();
-
-        const newImage = {
-          file: imageFile,
-          dataUrl: e.target.result,
-          name: imageFile.name.replace(`.${imageFile.type.split("/")[1]}`, "").replace(".jpg", "") || imageFile.name,
-          size: [img.width, img.height]
-        }
-        this.setState({ images: [newImage, ...this.state.images] });
       };
 
       reader.readAsDataURL(imageFile);

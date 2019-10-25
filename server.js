@@ -77,8 +77,8 @@ const resizeImages = async (images, dirName, android = true) => {
       size: images[i].size
     };
 
-    const width = parseInt(image.size.width);
-    const height = parseInt(image.size.height);
+    let width = parseInt(image.size.width);
+    let height = parseInt(image.size.height);
 
     if (ACCEPTED_MIME_TYPES.indexOf(mimType) != -1) {
       if (android) {
