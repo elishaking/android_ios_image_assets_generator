@@ -5,12 +5,18 @@ import './Home.scss';
 
 import NavBar from '../NavBar';
 
+const ERROR_STYLE = {
+  border: "1px solid red",
+  boxShadow: "0 0 6px 0px #ff0000b5"
+};
+
 export default class Home extends Component {
   state = {
     dropText: "Select/Drop Image(s)",
     images: [],
     loadingAndroid: false,
-    loadingIOS: false
+    loadingIOS: false,
+    errorStyle: {}
   };
 
   /**
@@ -18,6 +24,7 @@ export default class Home extends Component {
    * @param {import('react-dropzone').DropEvent} event
    */
   dropped = (imageFiles, event) => {
+    this.setState({ dropText: "Select/Drop Image(s)", errorStyle: {} })
     imageFiles.forEach((imageFile) => {
       const reader = new FileReader();
 
@@ -44,6 +51,10 @@ export default class Home extends Component {
 
   dragLeave = () => {
     this.setState({ dropText: "Select/Drop Image(s)" });
+  };
+
+  dragRejected = () => {
+    this.setState({ dropText: "Select/Drop Image(s)", errorStyle: ERROR_STYLE })
   };
 
   generateAssets = (os = "android") => {
@@ -97,7 +108,7 @@ export default class Home extends Component {
   };
 
   render() {
-    const { images, loadingAndroid, loadingIOS } = this.state;
+    const { images, loadingAndroid, loadingIOS, errorStyle } = this.state;
     return (
       <div id="home">
         <NavBar />
@@ -108,15 +119,16 @@ export default class Home extends Component {
               onDropAccepted={this.dropped}
               onDragEnter={this.dragEnter}
               onDragLeave={this.dragLeave}
+              onDropRejected={this.dragRejected}
               accept="image/png">
               {
                 ({ getRootProps, getInputProps, isDragReject }) => (
-                  <div {...getRootProps()} className="select">
+                  <div {...getRootProps()} className="select" style={errorStyle}>
                     <input {...getInputProps()} />
 
                     <p>{this.state.dropText}</p>
                     {/* <small>1000x1000 recommended</small> */}
-                    {isDragReject && (<small className="error">File type not accepted</small>)}
+                    {errorStyle === ERROR_STYLE && (<small className="error">File type not accepted</small>)}
                   </div>
                 )
               }
